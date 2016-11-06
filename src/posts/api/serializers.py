@@ -1,4 +1,8 @@
-from rest_framework.serializers import ModelSerializer, HyperlinkedIdentityField
+from rest_framework.serializers import (
+    ModelSerializer,
+    HyperlinkedIdentityField,
+    SerializerMethodField,
+)
 
 from posts.models import Post
 
@@ -23,6 +27,11 @@ class PostCreateUpdateSerializer(ModelSerializer):
 class PostListSerializer(ModelSerializer):
     url = post_detail_url
     deleted_url = post_delete_url
+    user = SerializerMethodField()
+
+    def get_user(self,obj):
+        return str(obj.user.username)
+
     class Meta:
         model = Post
         fields = [
@@ -36,13 +45,34 @@ class PostListSerializer(ModelSerializer):
         ]
 class PostSDetailerializer(ModelSerializer):
     url = post_detail_url
+    deleted_url = post_delete_url
+    user = SerializerMethodField()
+    image = SerializerMethodField()
+    markdown = SerializerMethodField()
+
+    def get_user(self, obj):
+        return str(obj.user.username)
+
+    def get_markdown(self, obj):
+        return str(obj.get_markdown())
+
+    def get_image(self, obj):
+        try:
+            image = obj.image.url
+        except:
+            image = None
+        return image
+
     class Meta:
         model = Post
         fields = [
             'url',
+            'deleted_url',
             'id',
             'user',
             'title',
             'slug',
             'content',
+            'image',
+            'markdown',
         ]
