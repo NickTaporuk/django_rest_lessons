@@ -24,6 +24,7 @@ class PostCreateUpdateSerializer(ModelSerializer):
             'content',
             'publish',
         ]
+
 class PostListSerializer(ModelSerializer):
     url = post_detail_url
     deleted_url = post_delete_url
