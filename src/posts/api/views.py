@@ -17,6 +17,12 @@ from rest_framework.pagination import (
     PageNumberPagination,
 )
 from posts.models import Post
+
+from .pagination import (
+    PostLimitOffsetPagination,
+    PostPageNumberPagination,
+)
+
 from .serializers import (
     PostListSerializer,
     PostSDetailerializer,
@@ -63,7 +69,7 @@ class PostListAPIView(ListAPIView):
     serializer_class = PostListSerializer
     filter_backends = [SearchFilter, OrderingFilter]
     search_fields = ['title', 'content', 'user__first_name', 'slug']
-    pagination_class = LimitOffsetPagination #PageNumberPagination
+    pagination_class = PostPageNumberPagination #PostLimitOffsetPagination #LimitOffsetPagination #PageNumberPagination
 
     def get_queryset(self, *args, **kwargs):
         query = self.request.GET.get("q")
