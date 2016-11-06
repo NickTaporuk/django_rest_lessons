@@ -11,12 +11,8 @@ comment_detail_url = HyperlinkedIdentityField(
     lookup_field='id',
 )
 
-# comment_delete_url = HyperlinkedIdentityField(
-#     view_name='comments-api:list',
-#     lookup_field='id',
-# )
 class CommentSerializer(ModelSerializer):
-    url = comment_detail_url
+    # url = comment_detail_url
     replies_count = SerializerMethodField()
 
     def get_replies_count(self, obj):
@@ -35,7 +31,7 @@ class CommentSerializer(ModelSerializer):
             'parent_id',
             'user_id',
             'replies_count',
-            'url'
+            # 'url'
         ]
 
 class CommentChildSerializer(ModelSerializer):

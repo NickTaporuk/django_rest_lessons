@@ -46,22 +46,4 @@ class CommentDetailAPIView(RetrieveAPIView):
 class CommentListAPIView(ListAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    # filter_backends = [SearchFilter, OrderingFilter]
-    # search_fields = ['content', 'user__first_name']
     pagination_class = PostPageNumberPagination #PostLimitOffsetPagination #LimitOffsetPagination #PageNumberPagination
-
-    # def get_queryset(self, *args, **kwargs):
-    #     query = self.request.GET.get("q")
-    #     # queryset_list = Post.objects.filter(user=self.request.user)
-    #     queryset_list = Comment.objects.all()
-    #     # queryset_list = super(PostListAPIView, self).get_queryset(*args, **kwargs)
-    #     if query:
-    #         queryset_list = queryset_list.filter(
-    #             Q(content__icontains=query) |
-    #             Q(user__icontains=query) |
-    #             Q(user__first_name__icontains=query) |
-    #             Q(user__last_name__icontains=query)
-    #         ).distinct()
-    #     return queryset_list
-#
-#
