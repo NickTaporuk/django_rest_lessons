@@ -17,6 +17,7 @@ from rest_framework.pagination import (
     LimitOffsetPagination,
     PageNumberPagination,
 )
+from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin
 from posts.api.permissions import IsOwnerOrReadOnly
 from posts.api.pagination import (
     PostLimitOffsetPagination,
@@ -25,6 +26,7 @@ from posts.api.pagination import (
 from .serializers import (
     CommentSerializer,
     CommentDetailSerializer,
+    CommentEditSerializer,
     create_comment_serializer
 )
 
@@ -65,3 +67,13 @@ class CommentCreateAPIView(CreateAPIView):
         )
     # def perform_create(self, serializer):
     #     serializer.save(user=self.request.user)
+
+class CommentEditAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView):
+    queryset = Comment.objects.filter(id__gte=0)
+    serializer_class = CommentEditSerializer
+    lookup_field = 'id'
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
