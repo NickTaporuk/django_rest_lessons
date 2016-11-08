@@ -12,7 +12,14 @@ from rest_framework.filters import (
     SearchFilter,
     OrderingFilter
 )
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly
+)
 
+from posts.api.permissions import IsOwnerOrReadOnly
 from rest_framework.pagination import (
     LimitOffsetPagination,
     PageNumberPagination,
@@ -26,7 +33,7 @@ from posts.api.pagination import (
 from .serializers import (
     CommentSerializer,
     CommentDetailSerializer,
-    CommentEditSerializer,
+    # CommentEditSerializer,
     create_comment_serializer
 )
 
@@ -39,11 +46,12 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly
 )
 #
-class CommentDetailAPIView(RetrieveAPIView):
-    queryset = Comment.objects.all()
-    serializer_class = CommentDetailSerializer
-    lookup_field = 'id'
-    pagination_class = PostPageNumberPagination
+# class CommentEditAPIView(RetrieveAPIView):
+# # class CommentDetailAPIView(RetrieveAPIView):
+#     queryset = Comment.objects.all()
+#     serializer_class = CommentDetailSerializer
+#     lookup_field = 'id'
+#     pagination_class = PostPageNumberPagination
 
 class CommentListAPIView(ListAPIView):
     queryset = Comment.objects.all()
@@ -68,10 +76,12 @@ class CommentCreateAPIView(CreateAPIView):
     # def perform_create(self, serializer):
     #     serializer.save(user=self.request.user)
 
-class CommentEditAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView):
+class CommentDetailAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView):
+# class CommentEditAPIView(DestroyModelMixin, UpdateModelMixin, RetrieveAPIView):
     queryset = Comment.objects.filter(id__gte=0)
-    serializer_class = CommentEditSerializer
+    serializer_class = CommentDetailSerializer#CommentEditSerializer
     lookup_field = 'id'
+    permission_classes = [IsAuthenticated , IsOwnerOrReadOnly]
 
     def put(self, request, *args, **kwargs):
         return self.update(request, *args, **kwargs)

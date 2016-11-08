@@ -120,19 +120,26 @@ class CommentDetailSerializer(ModelSerializer):
             'object_id',
             'content',
             'timestamp',
-            'content_type_id',
+            'content_type',
             'parent_id',
             'replies',
             'replies_count',
             'user_id'
         ]
 
-class CommentEditSerializer(ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = [
-            'id',
-            'content',
-            'timestamp'
+        read_only_fields = [
+            'content_type',
+            'replies_count',
+            'object_id',
+            'replies',
         ]
+
+# class CommentEditSerializer(ModelSerializer):
+#
+#     class Meta:
+#         model = Comment
+#         fields = [
+#             'id',
+#             'content',
+#             'timestamp'
+#         ]
