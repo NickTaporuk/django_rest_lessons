@@ -67,8 +67,8 @@ def create_comment_serializer(model_type='post', slug=None, parent_id=None, user
 
     return CommentCreateSerializer
 
-class CommentSerializer(ModelSerializer):
-    # url = comment_detail_url
+class CommentListSerializer(ModelSerializer):
+    url = comment_detail_url
     replies_count = SerializerMethodField()
 
     def get_replies_count(self, obj):
@@ -80,14 +80,14 @@ class CommentSerializer(ModelSerializer):
         model = Comment
         fields = [
             'id',
-            'object_id',
+            # 'object_id',
             'content',
             'timestamp',
-            'content_type_id',
-            'parent_id',
+            # 'content_type_id',
+            # 'parent_id',
             'user_id',
             'replies_count',
-            # 'url'
+            'url',
         ]
 
 class CommentChildSerializer(ModelSerializer):
@@ -102,6 +102,7 @@ class CommentChildSerializer(ModelSerializer):
 class CommentDetailSerializer(ModelSerializer):
     replies = SerializerMethodField()
     replies_count = SerializerMethodField()
+    content_object_url = SerializerMethodField()
 
     def get_replies(self, obj):
         if obj.is_parent:
@@ -113,26 +114,34 @@ class CommentDetailSerializer(ModelSerializer):
             return obj.children().count()
         return 0
 
+    def get_content_object_url(self, obj):
+        try :
+            return obj.content_object.get_api_url()
+        except:
+            return None
+
+
     class Meta:
         model = Comment
         fields = [
             'id',
-            'object_id',
+            # 'object_id',
             'content',
             'timestamp',
-            'content_type',
+            # 'content_type',
             'parent_id',
             'replies',
             'replies_count',
-            'user_id'
+            'user_id',
+            'content_object_url'
         ]
-
         read_only_fields = [
-            'content_type',
+            # 'content_type',
+            # 'object_id',
             'replies_count',
-            'object_id',
             'replies',
         ]
+
 
 # class CommentEditSerializer(ModelSerializer):
 #
