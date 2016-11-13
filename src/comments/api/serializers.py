@@ -5,6 +5,7 @@ from rest_framework.serializers import (
     SerializerMethodField,
     ValidationError
 )
+
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from comments.models import Comment
@@ -80,11 +81,8 @@ class CommentListSerializer(ModelSerializer):
         model = Comment
         fields = [
             'id',
-            # 'object_id',
             'content',
             'timestamp',
-            # 'content_type_id',
-            # 'parent_id',
             'user_id',
             'replies_count',
             'url',
@@ -125,10 +123,8 @@ class CommentDetailSerializer(ModelSerializer):
         model = Comment
         fields = [
             'id',
-            # 'object_id',
             'content',
             'timestamp',
-            # 'content_type',
             'parent_id',
             'replies',
             'replies_count',
@@ -136,19 +132,6 @@ class CommentDetailSerializer(ModelSerializer):
             'content_object_url'
         ]
         read_only_fields = [
-            # 'content_type',
-            # 'object_id',
             'replies_count',
             'replies',
         ]
-
-
-# class CommentEditSerializer(ModelSerializer):
-#
-#     class Meta:
-#         model = Comment
-#         fields = [
-#             'id',
-#             'content',
-#             'timestamp'
-#         ]
